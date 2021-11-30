@@ -1,0 +1,40 @@
+#/bin/python
+import os
+import PySimpleGUI as sg
+from polyply_gui.windows import MainWindow, GraphViewerWindow
+from polyply_gui.events import EventHandler
+from polyply import DATA_PATH
+from polyply.src.load_library import load_library
+
+def __main__():
+
+    sg.theme('DarkBlue2')
+
+    # create the windows
+    libs = os.listdir(DATA_PATH)
+    libs = [lib for lib in libs if not lib.startswith("__")]
+    main_window = MainWindow(libs, title="Polyply GUI", modal=False).create_window()
+    graph_viewer = GraphViewerWindow(canvas_size=(800, 800), title="Graph Viewer", modal=False).create_window()
+
+    # initalize the event handler
+    event_handler = EventHandler(main_window, graph_viewer, canvas_size=(800, 800))
+
+    while True:
+        window, event, values = sg.read_all_windows()
+
+        if event == "Exit" or event == sg.WIN_CLOSED:
+            window.close()
+            if window == main_window:     # if closing win 1, exit program
+               break
+        elif event == 'graph_event+UP':
+            continue
+        else:
+            try:
+                event_method = getattr(event_handler, event)
+                event_method(window, event, values)
+            except AttributeError:
+                raise IOError("unkown event triggered. Bailing out.")
+
+    main_window.close()
+
+__main__()
