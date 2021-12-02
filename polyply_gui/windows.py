@@ -170,6 +170,8 @@ class MainWindow(WindowCreator):
                           ]
 
         sequence_viewer_column = [[sg.Text("I/O", justification="center", size=(20, 1), font='bold')],
+                                  [sg.Text("First save the graph.", size=(20, 1))],
+                                  [sg.Text("Then run generate itp.", size=(20, 1))],
                                   [sg.SaveAs(button_text="save graph", enable_events=True, key='write_seq_file')],
                                   [sg.SaveAs(button_text="generate itp file", enable_events=True, key='gen_itp')]]
 
